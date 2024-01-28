@@ -1,0 +1,49 @@
+##Sathish App - Pipeline Script##
+node{
+   stage('SCM Checkout'){
+     git 'https://github.com/infx06037/my-app.git'
+   }
+   stage('Compile-Package'){
+
+      def mvnHome =  tool name: 'maven3', type: 'maven'   
+      sh "${mvnHome}/bin/mvn clean package"
+	  sh 'mv target/myweb*.war target/newapp.war'
+   }
+   stage('SonarQube Analysis') {
+	        def mvnHome =  tool name: 'maven3', type: 'maven'
+	        withSonarQubeEnv('sonar') { 
+	          sh "${mvnHome}/bin/mvn sonar:sonar"
+	        }
+	    }
+   stage('Build Docker Imager'){
+   sh 'docker build -t infx06037/myweb:0.0.2 .'
+   }
+   stage('Image push into ECR') {
+        withCredentials([string(credentialsId: 'myaccesskey', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'mysecretaccesskey', variable: 'AWS_SECRET_ACCESS_KEY')]) {
+            script {
+                def ecrLogin = sh(script: "aws ecr get-login-password --region us-east-1", returnStdout: true).trim()
+                def dockerCommand = "docker login --username AWS --password-stdin 986299884685.dkr.ecr.us-east-1.amazonaws.com"
+                sh "echo '${ecrLogin}' | ${dockerCommand}"
+                sh 'docker build -t fita-app .'
+                sh 'docker tag fita-app:latest 986299884685.dkr.ecr.us-east-1.amazonaws.com/fita-app:latest'
+                sh 'docker push 986299884685.dkr.ecr.us-east-1.amazonaws.com/fita-app:latest'
+            }
+        }
+    }
+   stage('Docker Image Push'){
+   withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
+   sh "docker login -u infx06037 -p ${dockerPassword}"
+    }
+   sh 'docker push infx06037/myweb:0.0.2'
+   }
+   stage('Remove Previous Container'){
+	try{
+		sh 'docker rm -f tomcattest'
+	}catch(error){
+		//  do nothing if there is an exception
+	}
+   stage('Docker deployment'){
+   sh 'docker run -d -p 8090:8080 --name tomcattest infx06037/myweb:0.0.2' 
+   }
+}
+}
