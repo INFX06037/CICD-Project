@@ -15,7 +15,8 @@ EC2-1 (t2.medium)
   -> update the permission of docker file chmod 777 /var/run/docker.sock
   -> Install maven on /opt by using below link
        https://mirrors.estointernet.in/apache/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
-  -> Configure Maven plugin and add home path of maven into plugin.
+       tar -xvf apache-maven-3.8.5-bin.tar.gz
+  -> Configure Maven plugin and add home path(/opt/apache-maven-3.8.5) of maven into plugin.
   -> Pass Docker credentials into global credential manager
 
 EC2-2 (t2.medium)
