@@ -18,6 +18,7 @@ EC2-1 (t2.medium)
        tar -xvf apache-maven-3.8.5-bin.tar.gz
   -> Configure Maven plugin and add home path(/opt/apache-maven-3.8.5) of maven into plugin.
   -> Pass Docker credentials into global credential manager
+     manage jenkins > Credentials > System > Global credentials > Secret text
 
 EC2-2 (t2.medium)
 
