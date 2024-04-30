@@ -16,7 +16,7 @@ node{
 	        }
 	    }
    stage('Build Docker Imager'){
-   sh 'docker build -t infx06037/myweb:0.0.2 .'
+   sh 'docker build -t infx06037/myimg:0.0.2 .'
    }
    stage('Image push into ECR') {
         withCredentials([string(credentialsId: 'myaccesskey', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'mysecretaccesskey', variable: 'AWS_SECRET_ACCESS_KEY')]) {
@@ -34,7 +34,7 @@ node{
    withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
    sh "docker login -u infx06037 -p ${dockerPassword}"
     }
-   sh 'docker push infx06037/myweb:0.0.2'
+   sh 'docker push infx06037/myimg:0.0.2'
    }
    stage('Remove Previous Container'){
 	try{
@@ -43,7 +43,7 @@ node{
 		//  do nothing if there is an exception
 	}
    stage('Docker deployment'){
-   sh 'docker run -d -p 8090:8080 --name tomcattest infx06037/myweb:0.0.2' 
+   sh 'docker run -d -p 8090:8080 --name tomcattest infx06037/myimg:0.0.2' 
    }
 }
 }
