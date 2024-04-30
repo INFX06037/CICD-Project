@@ -62,7 +62,9 @@ GRANT ALL ON sonar.* TO sonar@'%';
    -> Enable gitbub webhook trigger in jenkins
    -> Add payload URL in Webhook http://jenkinsip:8080/github-webhook/
 4. ECS
+   -> run aws configure and configure the keys
    -> Pass AWS Secret key and Access key into global credentials
+       manage jenkins > Credentials > System > Global credentials > Secret text
    -> Create a ECR Registry into aws
 
 EC2-3 (t2.medium)
