@@ -66,7 +66,7 @@ GRANT ALL ON sonar.* TO sonar@'%';
    -> Pass AWS Secret key and Access key into global credentials
        manage jenkins > Credentials > System > Global credentials > Secret text
    -> Create a ECR Registry into aws
-
+OR------------->
 EC2-3 (t2.medium)
 5. Nexus
    -> yum install java-1.8.0 -y
@@ -86,7 +86,7 @@ Overall Stages:
 4. Stage4 Build Docker Image
 5. Stage5 Push Docker Image to DockerHub
 6. Remove Old Container bfr deploying in to VM
-7. Stage6 Store Docker images in Nexus Private Registery
+7. Stage6 Store Docker images in ECS or Nexus Private Registery
 8. Stage7 Deploy the docker image on VM
 
 
